@@ -19,7 +19,7 @@ void main() {
     });
 
     group('$_MultifunctionalCounter example.', () {
-      late _MultifunctionalCounter counter;
+      _MultifunctionalCounter counter;
 
       setUp(() {
         counter = _MultifunctionalCounter(initialCount: 2);
@@ -49,7 +49,7 @@ void main() {
     });
 
     group('$_MultifunctionalCounterWithCounterInputEvent example.', () {
-      late _MultifunctionalCounterWithCounterInputEvent counter;
+      _MultifunctionalCounterWithCounterInputEvent counter;
 
       setUp(() {
         counter = _MultifunctionalCounterWithCounterInputEvent(initialCount: 2);
@@ -81,7 +81,7 @@ void main() {
     });
 
     group('$_LoosenedMultiFunctionalCounter example.', () {
-      late _LoosenedMultiFunctionalCounter counter;
+      _LoosenedMultiFunctionalCounter counter;
 
       setUp(() {
         counter = _LoosenedMultiFunctionalCounter(initialCount: 2);
@@ -121,23 +121,28 @@ void main() {
 }
 
 class _MultifunctionalCounter with ReactiveComponent {
-  _MultifunctionalCounter({required int initialCount})
+  _MultifunctionalCounter({@required int initialCount})
       : _initialCount = initialCount;
 
   final int _initialCount;
 
-  late final ReactiveSink<int> add = ReactiveSink((i) {
-    _count.data = _count.data + i;
-  }, disposer: this.disposer);
+  ReactiveSink<int> _add;
+  ReactiveSink<int> get add => _add ??= ReactiveSink((i) {
+        _count.data = _count.data + i;
+      }, disposer: this.disposer);
 
-  late final ReactiveSink<int> subtract = ReactiveSink((i) {
-    _count.data = _count.data - i;
-  }, disposer: this.disposer);
+  ReactiveSink<int> _subtract;
+  ReactiveSink<int> get subtract => _subtract ??= ReactiveSink((i) {
+        _count.data = _count.data - i;
+      }, disposer: this.disposer);
 
-  late final ReactiveSink<int> multiplyBy =
-      ReactiveSink(_multiply, disposer: this.disposer);
+  ReactiveSink<int> _multiplyBy;
+  ReactiveSink<int> get multiplyBy =>
+      _multiplyBy ??= ReactiveSink(_multiply, disposer: this.disposer);
 
-  late final _count = Reactive<int>(_initialCount, disposer: this.disposer);
+  Reactive<int> __count;
+  Reactive<int> get _count =>
+      __count ??= Reactive<int>(_initialCount, disposer: this.disposer);
   Stream<int> get count => _count.stream;
 
   void _multiply(int by) {
@@ -154,27 +159,30 @@ class CounterInputEvent {
 }
 
 class _MultifunctionalCounterWithCounterInputEvent with ReactiveComponent {
-  _MultifunctionalCounterWithCounterInputEvent({required int initialCount})
+  _MultifunctionalCounterWithCounterInputEvent({@required int initialCount})
       : _initialCount = initialCount;
 
   final int _initialCount;
 
-  late final ReactiveSink<CounterInputEvent> counterInput =
-      ReactiveSink((event) {
-    switch (event.type) {
-      case CounterInputEventType.add:
-        _count.data = _count.data + event.data;
-        break;
-      case CounterInputEventType.subtract:
-        _count.data = _count.data - event.data;
-        break;
-      case CounterInputEventType.multiply:
-        _multiply(event.data);
-        break;
-    }
-  }, disposer: this.disposer);
+  ReactiveSink<CounterInputEvent> _counterInput;
+  ReactiveSink<CounterInputEvent> get counterInput =>
+      _counterInput ??= ReactiveSink((event) {
+        switch (event.type) {
+          case CounterInputEventType.add:
+            _count.data = _count.data + event.data;
+            break;
+          case CounterInputEventType.subtract:
+            _count.data = _count.data - event.data;
+            break;
+          case CounterInputEventType.multiply:
+            _multiply(event.data);
+            break;
+        }
+      }, disposer: this.disposer);
 
-  late final _count = Reactive<int>(_initialCount, disposer: this.disposer);
+  Reactive<int> __count;
+  Reactive<int> get _count =>
+      __count ??= Reactive<int>(_initialCount, disposer: this.disposer);
   Stream<int> get count => _count.stream;
 
   void _multiply(int by) {
@@ -183,25 +191,30 @@ class _MultifunctionalCounterWithCounterInputEvent with ReactiveComponent {
 }
 
 class _Counter with ReactiveComponent {
+  VoidReactiveSink _increment;
   // FIXME: "this" is necessary here,
   // otherwise it will cause compile error:
   // " Error: Getter not found: 'disposer'.".
   // Dart SDK version: 2.10.0-7.0.dev (dev) (Mon Aug 10 22:32:08 2020 +0200) on "macos_x64"
-  late final VoidReactiveSink increment = VoidReactiveSink((_) {
-    _count.data++;
-  }, disposer: this.disposer);
+  VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
+        _count.data++;
+      }, disposer: this.disposer);
 
-  late final _count = Reactive<int>(0, disposer: this.disposer);
+  Reactive<int> __count;
+  Reactive<int> get _count =>
+      __count ??= Reactive<int>(0, disposer: this.disposer);
   Stream<int> get count => _count.stream;
 }
 
 class _LoosenedMultiFunctionalCounter with ReactiveOutputComponent {
-  _LoosenedMultiFunctionalCounter({required int initialCount})
+  _LoosenedMultiFunctionalCounter({@required int initialCount})
       : _initialCount = initialCount;
 
   final int _initialCount;
 
-  late final _count = Reactive<int>(_initialCount, disposer: this.disposer);
+  Reactive<int> __count;
+  Reactive<int> get _count =>
+      __count ??= Reactive<int>(_initialCount, disposer: this.disposer);
   Stream<int> get count => _count.stream;
 
   void add(int count) {
@@ -218,11 +231,18 @@ class _LoosenedMultiFunctionalCounter with ReactiveOutputComponent {
 }
 
 class _ComposedComponent with ReactiveComponent {
-  late final aSink = ReactiveSink<int>((event) {}, disposer: this.disposer);
-  late final _aReactiveInt = Reactive<int>(0, disposer: this.disposer);
-  late final _sub1 = _SubComponent(disposer: this.disposer);
-  late final _sub2 = _SubComponent(disposer: this.disposer);
-  late final _sub3 = _SubComponent(disposer: this.disposer);
+  ReactiveSink<int> __aSink;
+  ReactiveSink<int> get aSink =>
+      __aSink ??= ReactiveSink<int>((event) {}, disposer: this.disposer);
+  Reactive<int> __aReactiveInt;
+  Reactive<int> get _aReactiveInt =>
+      __aReactiveInt ??= Reactive<int>(0, disposer: this.disposer);
+  _SubComponent __sub1;
+  _SubComponent get _sub1 => __sub1 ??= _SubComponent(disposer: this.disposer);
+  _SubComponent __sub2;
+  _SubComponent get _sub2 => __sub2 ??= _SubComponent(disposer: this.disposer);
+  _SubComponent __sub3;
+  _SubComponent get _sub3 => __sub3 ??= _SubComponent(disposer: this.disposer);
 
   Stream<void> get testDisposedAll async* {
     await Future.wait([
@@ -239,7 +259,7 @@ class _ComposedComponent with ReactiveComponent {
 }
 
 class _SubComponent with ReactiveComponent {
-  _SubComponent({ResourceDisposer? disposer}) {
+  _SubComponent({ResourceDisposer /*nullable*/ disposer}) {
     if (disposer != null) {
       delegateDisposingTo(disposer);
     }

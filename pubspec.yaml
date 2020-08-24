@@ -1,14 +1,14 @@
 name: reactive_component
 description: Reactive Component.
-version: 0.1.0-nullsafety-dev.1
+version: 0.1.0
 homepage: https://github.com/polyflection/reactive_component
 
 environment:
-  sdk: '>=2.10.0-0 <2.10.0'
+  sdk: '>=2.9.0 <2.10.0'
 
 dependencies:
   meta: ^1.0.0
   pedantic: ^1.9.0
 
 dev_dependencies:
-  test: 1.16.0-nullsafety.1
+  test:

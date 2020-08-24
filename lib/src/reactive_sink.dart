@@ -12,16 +12,16 @@ import 'typedef.dart';
 class ReactiveSink<E> with ReactiveResource implements StreamSink<E> {
   /// ReactiveSink
   ReactiveSink(this._onEvent,
-      {_Transform<E>? transform,
-      required ResourceDisposer? disposer,
-      VoidCallback? onDispose,
-      _OnError? onError,
-      bool? cancelOnError,
-      VoidCallback? onListen,
-      VoidCallback? onPause,
-      VoidCallback? onResume,
-      VoidCallback? onCancel,
-      HandleSubscription<E>? handleSubscription})
+      {_Transform<E> /*nullable*/ transform,
+      @required ResourceDisposer /*nullable*/ disposer,
+      VoidCallback /*nullable*/ onDispose,
+      _OnError /*nullable*/ onError,
+      bool /*nullable*/ cancelOnError,
+      VoidCallback /*nullable*/ onListen,
+      VoidCallback /*nullable*/ onPause,
+      VoidCallback /*nullable*/ onResume,
+      VoidCallback /*nullable*/ onCancel,
+      HandleSubscription<E> /*nullable*/ handleSubscription})
       : _transform = transform,
         _onDispose = onDispose,
         _onError = onError,
@@ -35,7 +35,7 @@ class ReactiveSink<E> with ReactiveResource implements StreamSink<E> {
     }
     if (handleSubscription != null) {
       _listenOnce();
-      handleSubscription(eventStreamSubscription!);
+      handleSubscription(eventStreamSubscription);
     }
   }
 
@@ -61,7 +61,7 @@ class ReactiveSink<E> with ReactiveResource implements StreamSink<E> {
   }
 
   @override
-  void addError(Object error, [StackTrace? stackTrace]) {
+  void addError(Object error, [StackTrace /*nullable*/ stackTrace]) {
     if (isDisposeEventSent) return;
 
     _listenOnce();
@@ -97,30 +97,32 @@ class ReactiveSink<E> with ReactiveResource implements StreamSink<E> {
   }
 
   final _OnEvent<E> _onEvent;
-  final _Transform<E>? _transform;
-  final VoidCallback? _onDispose;
-  final _OnError? _onError;
-  final bool? _cancelOnError;
-  final VoidCallback? _onListen;
-  final VoidCallback? _onPause;
-  final VoidCallback? _onResume;
-  final VoidCallback? _onCancel;
+  final _Transform<E> /*nullable*/ _transform;
+  final VoidCallback /*nullable*/ _onDispose;
+  final _OnError /*nullable*/ _onError;
+  final bool /*nullable*/ _cancelOnError;
+  final VoidCallback /*nullable*/ _onListen;
+  final VoidCallback /*nullable*/ _onPause;
+  final VoidCallback /*nullable*/ _onResume;
+  final VoidCallback /*nullable*/ _onCancel;
 
-  late final StreamController<E> _eventStreamController = StreamController<E>(
-      onListen: _onListen,
-      onPause: _onPause,
-      onResume: _onResume,
-      onCancel: _onCancel);
+  StreamController<E> __eventStreamController;
+  StreamController<E> get _eventStreamController =>
+      __eventStreamController ??= StreamController<E>(
+          onListen: _onListen,
+          onPause: _onPause,
+          onResume: _onResume,
+          onCancel: _onCancel);
 
   @visibleForTesting
-  StreamSubscription<E>? eventStreamSubscription;
+  StreamSubscription<E> /*nullable*/ eventStreamSubscription;
 
   /// Closes [_eventStreamController]'s sink.
   Future<void> _doCloseSink() async {
     if (_eventStreamController.isClosed) return;
 
     if (_eventStreamController.hasListener) {
-      return eventStreamSubscription!.cancel();
+      return eventStreamSubscription.cancel();
     } else {
       if (eventStreamSubscription == null) {
         // If a stream is not listened, a sink will not be done.
@@ -147,16 +149,16 @@ class VoidReactiveSink extends ReactiveSink<void> implements VoidSink {
   // Instead of extending, delegating with implementing should make it possible.
   VoidReactiveSink(
     _OnEvent<void> onVoidEvent, {
-    _Transform<void>? transform,
-    required ResourceDisposer? disposer,
-    VoidCallback? onDispose,
-    _OnError? onError,
-    bool? cancelOnError,
-    VoidCallback? onListen,
-    VoidCallback? onPause,
-    VoidCallback? onResume,
-    VoidCallback? onCancel,
-    HandleSubscription<void>? handleSubscription,
+    _Transform<void> /*nullable*/ transform,
+    @required ResourceDisposer /*nullable*/ disposer,
+    VoidCallback /*nullable*/ onDispose,
+    _OnError /*nullable*/ onError,
+    bool /*nullable*/ cancelOnError,
+    VoidCallback /*nullable*/ onListen,
+    VoidCallback /*nullable*/ onPause,
+    VoidCallback /*nullable*/ onResume,
+    VoidCallback /*nullable*/ onCancel,
+    HandleSubscription<void> /*nullable*/ handleSubscription,
   }) : super(
           onVoidEvent,
           transform: transform,

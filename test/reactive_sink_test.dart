@@ -84,7 +84,7 @@ void main() {
     test(
         'Pause and resume by event StreamSubscription, '
         'which can be handled via HandleSubscription callback.', () async {
-      late StreamSubscription<int> eventSubscription;
+      StreamSubscription<int> eventSubscription;
       var i = 0;
       final sink = ReactiveSink<int>((event) {
         i = i + event;
@@ -112,7 +112,7 @@ void main() {
 
     test('Cancel subscription.', () async {
       var onDoneIsCalled = false;
-      late StreamSubscription<int> eventSubscription;
+      StreamSubscription<int> eventSubscription;
 
       final sink = ReactiveSink<int>((event) {}, handleSubscription: (s) {
         eventSubscription = s;
@@ -135,8 +135,8 @@ void main() {
 
   group('Dispose.', () {
     group('Delegating disposing.', () {
-      late ReactiveSink<int> sink;
-      late ResourceDisposer disposer;
+      ReactiveSink<int> sink;
+      ResourceDisposer disposer;
       var isEventHandled = false;
 
       setUp(() {
@@ -163,7 +163,7 @@ void main() {
       });
 
       test('Dispose by dispose() on pause', () async {
-        late final StreamSubscription<int> subscription;
+        StreamSubscription<int> subscription;
         sink = ReactiveSink<int>((event) {}, disposer: disposer,
             handleSubscription: (s) {
           subscription = s;
@@ -190,7 +190,7 @@ void main() {
     });
 
     group('Not delegating disposing', () {
-      late ReactiveSink<int> sink;
+      ReactiveSink<int> sink;
 
       setUp(() {
         sink = ReactiveSink<int>((event) {}, disposer: null);
@@ -203,7 +203,7 @@ void main() {
       });
 
       test('Dispose by dispose() on pause', () async {
-        late final StreamSubscription<int> subscription;
+        StreamSubscription<int> subscription;
         sink = ReactiveSink<int>((event) {}, disposer: null,
             handleSubscription: (s) {
           subscription = s;

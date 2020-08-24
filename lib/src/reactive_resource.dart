@@ -10,9 +10,10 @@ mixin ReactiveResource implements _ReactiveResource {
   @override
   Stream<void> get disposed => disposer.disposed;
 
+  ResourceDisposer _disposer;
   @override
   @protected
-  late final ResourceDisposer disposer =
+  ResourceDisposer get disposer => _disposer ??=
       ResourceDisposer(doDispose: doDispose, onDispose: onDispose);
 
   @override

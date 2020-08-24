@@ -11,7 +11,3 @@ linter:
     - sort_constructors_first
     - sort_unnamed_constructors_first
     - type_annotate_public_apis
-
-analyzer:
-  enable-experiment:
-    - non-nullable
