@@ -44,6 +44,6 @@ When a ReactiveComponent wraps a domain model ( = business logic ), only with a 
 
 ## Status
 
-This is the initial release. Non non-nullable version will be added soon.
+This is the pre release. Non non-nullable version will be added soon.
 
 Documents and more test code should be added. Some APIs will likely change. More features are planned, such as logging for Sink / Stream, static analysis supports.
