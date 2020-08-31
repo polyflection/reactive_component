@@ -1,6 +1,6 @@
 # ReactiveComponent
 
-A Dart package for stream-based reactive programming, designed to support simplicity, composability, flexibility.
+A Dart package that supports stream-based reactive programming, designed for simplicity, composability, flexibility.
 
 ```dart
 class Counter with ReactiveComponent {
@@ -44,6 +44,6 @@ When a ReactiveComponent wraps a domain model ( = business logic ), only with a 
 
 ## Status
 
-This is the pre release. Non non-nullable version will be added soon.
+Both "null safety" and "non null safety" version are available. Null safety versions are published as pre-release version.
 
 Documents and more test code should be added. Some APIs will likely change. More features are planned, such as logging for Sink / Stream, static analysis supports.

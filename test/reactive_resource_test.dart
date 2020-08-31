@@ -69,7 +69,7 @@ class _Resource with ReactiveResource {
 
   Sink<int> get ownResourceSink => _ownResource.sink;
   final _ownResource = StreamController<int>();
-  StreamSubscription<int>? _subscription;
+  StreamSubscription<int> /*nullable*/ _subscription;
 
   bool _done = false;
   bool _isEventHandled = false;

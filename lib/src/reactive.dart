@@ -6,17 +6,68 @@ import 'package:reactive_component/reactive_component.dart';
 import 'resource_disposer.dart';
 import 'typedef.dart';
 
-/// A special stream controller.
+/// A special kind of [StreamController] that holds its latest stream data, and
+/// sends that as the first data to any new listener.
+///
+/// Reactive stream is a multi-subscription stream, added at Dart version 2.9.0.
+/// This allows multiple subscription, and each listener to be treated as an
+/// individual stream.
+///
+/// Reactive's [data] can get and set [data] synchronously. When a new [data]
+/// is set, it will be sent to all listeners of Reactive's stream immediately.
+///
+/// Reactive only supports asynchronous stream for now.
+/// Synchronous stream option could be added when some use case is reported.
+///
+/// # Example
+///
+/// ```
+/// final aReactiveInt = Reactive<int>(0, disposer: null);
+///
+/// aReactiveInt.data = 1;
+/// aReactiveInt.data = 2;
+/// aReactiveInt.data = 3;
+///
+/// aReactiveInt.stream.listen(print); // prints 3.
+/// aReactiveInt.stream.listen(print); // prints 3.
+/// aReactiveInt.stream.listen(print); // prints 3.
+/// ```
+///
+/// # Disposing its resource, or delegating to other [ReactiveResource].
+///
+/// Reactive is a kind of [ReactiveResource], which provides
+/// resource disposing action by [dispose] sink.
+/// [dispose] action can be delegated to other [ReactiveResource],
+/// typically a [ReactiveComponent].
+/// See [ReactiveComponent] for more explanation about delegating [dispose].
+///
+/// # Reactive data should be encapsulated in a [ReactiveComponent].
+///
+/// Reactive is strongly encouraged to be a private member of
+/// [ReactiveComponent] to hide its data mutating and other behaviors.
+/// Only a stream of a Reactive data should be publicized.
+/// Static analysis support is planned to prevent Reactive from being
+/// publicized.
 class Reactive<D> with ReactiveResource implements StreamController<D> {
-  /// Reactive.
+  /// Creates a [Reactive] data with its initial data, and
+  /// optional parameters of disposer and callbacks.
+  ///
+  /// It optionally pass [disposer] for delegating
+  /// its own resource disposing.
+  ///
+  /// [onDispose] callback will be certainly called only once on [dispose]
+  /// called.
+  ///
+  /// [onListen], [onPause], [onResume], [onCancel] are callbacks
+  /// to be set to all multi-stream controllers of Reactive.
   Reactive(
     this._data, {
-    required ResourceDisposer? disposer,
-    VoidCallback? onDispose,
-    VoidCallback? onListen,
-    VoidCallback? onPause,
-    VoidCallback? onResume,
-    FutureOrVoidCallback? onCancel,
+    @required ResourceDisposer /*nullable*/ disposer,
+    VoidCallback /*nullable*/ onDispose,
+    VoidCallback /*nullable*/ onListen,
+    VoidCallback /*nullable*/ onPause,
+    VoidCallback /*nullable*/ onResume,
+    FutureOrVoidCallback /*nullable*/ onCancel,
   })  : _onDispose = onDispose,
         _onListen = onListen,
         _onPause = onPause,
@@ -27,11 +78,21 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
     }
   }
 
-  @override
-  late final Stream<D> stream = Stream<D>.multi(_onListenMultiStream);
+  Stream<D> _stream;
 
+  /// The stream that this controller is controlling.
+  ///
+  /// This is multi-subscription stream. Each listener to be treated as an
+  /// individual stream.
+  ///
+  /// On listening this stream, [data] will be delivered immediately.
+  @override
+  Stream<D> get stream => _stream ??= Stream<D>.multi(_onListenMultiStream);
+
+  /// The latest data of this stream controller.
   D get data => _data;
 
+  /// Set [data], then it will be sent to the all stream listeners.
   set data(D newData) {
     _data = newData;
     for (final controller in _controllers) {
@@ -39,20 +100,22 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
     }
   }
 
+  /// Alias method of [data] setter.
   @override
   void add(D newData) {
     data = newData;
   }
 
   @override
-  void addError(Object error, [StackTrace? stackTrace]) {
+  void addError(Object error, [StackTrace /*nullable*/ stackTrace]) {
     for (final controller in _controllers) {
       controller.addError(error, stackTrace);
     }
   }
 
   @override
-  Future<void> addStream(Stream<D> source, {bool? cancelOnError}) async {
+  Future<void> addStream(Stream<D> source,
+      {bool /*nullable*/ cancelOnError}) async {
     // need tests carefully.
     await Future.wait(_controllers
         .map((c) => c.addStream(source, cancelOnError: cancelOnError)));
@@ -70,7 +133,8 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
   @override
   Future<void> get done => _doneCompleter.future;
 
-  /// Returns a view of this object that only exposes the [StreamSink] interface.
+  /// Returns a view of this object that only publicizes
+  /// the [StreamSink] interface.
   @override
   StreamSink<D> get sink => _StreamSinkWrapper<D>(this);
 
@@ -81,16 +145,16 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
   bool get hasListener => _controllers.any((c) => c.hasListener);
 
   @override
-  VoidCallback? get onListen => _onListen;
+  VoidCallback /*nullable*/ get onListen => _onListen;
   @override
-  VoidCallback? get onPause => _onPause;
+  VoidCallback /*nullable*/ get onPause => _onPause;
   @override
-  VoidCallback? get onResume => _onResume;
+  VoidCallback /*nullable*/ get onResume => _onResume;
   @override
-  FutureOrVoidCallback? get onCancel => _onCancel;
+  FutureOrVoidCallback /*nullable*/ get onCancel => _onCancel;
 
   @override
-  set onListen(VoidCallback? onListenHandler) {
+  set onListen(VoidCallback /*nullable*/ onListenHandler) {
     _onListen = onListenHandler;
     // [_onListen] will be called in [_onListenMultiStream],
     // since, unlike other [MultiStreamController] callbacks,
@@ -98,7 +162,7 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
   }
 
   @override
-  set onPause(VoidCallback? onPauseHandler) {
+  set onPause(VoidCallback /*nullable*/ onPauseHandler) {
     _onPause = onPauseHandler;
     for (final controller in _controllers) {
       controller.onPause = _onPause;
@@ -106,7 +170,7 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
   }
 
   @override
-  set onResume(VoidCallback? onResumeHandler) {
+  set onResume(VoidCallback /*nullable*/ onResumeHandler) {
     _onResume = onResumeHandler;
     for (final controller in _controllers) {
       controller.onResume = _onResume;
@@ -114,7 +178,7 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
   }
 
   @override
-  set onCancel(FutureOrVoidCallback? onCancelHandler) {
+  set onCancel(FutureOrVoidCallback /*nullable*/ onCancelHandler) {
     _onCancel = onCancelHandler;
     for (final controller in _controllers) {
       controller.onCancel =
@@ -136,21 +200,21 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
 
   D _data;
 
-  final VoidCallback? _onDispose;
+  final VoidCallback /*nullable*/ _onDispose;
 
-  VoidCallback? _onListen;
+  VoidCallback /*nullable*/ _onListen;
 
   /// The callback which is called when a stream is paused.
   /// May be set to `null`, in which case no callback will happen.
-  VoidCallback? _onPause;
+  VoidCallback /*nullable*/ _onPause;
 
   /// The callback which is called when a stream is resumed.
   /// May be set to `null`, in which case no callback will happen.
-  VoidCallback? _onResume;
+  VoidCallback /*nullable*/ _onResume;
 
   /// The callback which is called when a stream is canceled.
   /// May be set to `null`, in which case no callback will happen.
-  FutureOrVoidCallback? _onCancel;
+  FutureOrVoidCallback /*nullable*/ _onCancel;
 
   final _controllers = <MultiStreamController<D>>[];
   final _doneCompleter = Completer<void>();
@@ -173,7 +237,7 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
   }
 
   Future<void> _handleOnCancelThenRemoveController(
-      FutureOrVoidCallback? onCancelHandler,
+      FutureOrVoidCallback /*nullable*/ onCancelHandler,
       MultiStreamController controller) async {
     await Future.sync(() => onCancelHandler?.call());
     _controllers.remove(controller);
@@ -187,7 +251,8 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
 
 typedef FutureOrVoidCallback = FutureOr<void> Function();
 
-/// A class that exposes only the [StreamSink] interface of an object.
+/// A class that publicizes only the [StreamSink] interface of
+/// a [StreamController].
 class _StreamSinkWrapper<D> implements StreamSink<D> {
   _StreamSinkWrapper(this._target);
 
@@ -199,7 +264,7 @@ class _StreamSinkWrapper<D> implements StreamSink<D> {
   }
 
   @override
-  void addError(Object error, [StackTrace? stackTrace]) {
+  void addError(Object error, [StackTrace /*nullable*/ stackTrace]) {
     _target.addError(error, stackTrace);
   }
 

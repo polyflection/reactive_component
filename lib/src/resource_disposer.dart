@@ -1,24 +1,37 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 import 'sinks.dart';
 import 'typedef.dart';
 
+/// An object to handle resource disposing.
 class ResourceDisposer {
+  /// Constructs resource disposer.
   ResourceDisposer(
-      {required Future<void> Function()? doDispose,
-      required VoidCallback? onDispose})
+      {@required Future<void> Function() /*nullable*/ doDispose,
+      @required VoidCallback /*nullable*/ onDispose})
       : _doDispose = doDispose,
         _onDispose = onDispose;
 
+  /// A [VoidSink] to dispose of the resources.
   VoidSink get dispose {
     return _VoidSink(_disposeController.sink, () => !_isDisposeEventSent,
         _wrapOnDispose(_onDispose));
   }
 
+  /// A stream to notify the resource has been disposed of.
   Stream<void> get disposed => Stream.fromFuture(_disposeController.done);
 
+  /// Check whether an event data has been added to [dispose] sink once.
+  ///
+  /// It is synchronously set to true on an event data added.
   bool get isDisposeEventSent => _isDisposeEventSent;
 
+  /// Registers a resource disposer for disposing of together.
+  ///
+  /// If [isDisposeEventSent] is true, then the resource disposer calls
+  /// dispose method immediately.
   void register(ResourceDisposer disposer) {
     if (isDisposeEventSent) {
       disposer.dispose();
@@ -27,25 +40,27 @@ class ResourceDisposer {
     }
   }
 
+  /// Delegates its [dispose] call to [disposerDelegate].
   void delegateDisposingTo(ResourceDisposer disposerDelegate) {
     disposerDelegate.register(this);
   }
 
-  final Future<void> Function()? _doDispose;
+  final Future<void> Function() /*nullable*/ _doDispose;
   final List<ResourceDisposer> _disposers = [];
 
-  late final _disposeController = StreamController<void>()
-    ..stream.listen((_) => _dispose());
+  StreamController<void> __disposeController;
+  StreamController<void> get _disposeController => __disposeController ??=
+      StreamController<void>()..stream.listen((_) => _dispose());
 
   Future<void> _dispose() => _doDispose != null
-      ? Future.wait([_doDispose!(), _disposePrivateResource()])
+      ? Future.wait([_doDispose(), _disposePrivateResource()])
       : _disposePrivateResource();
 
   Future<void> _disposePrivateResource() => _disposeController.close();
 
-  final VoidCallback? _onDispose;
+  final VoidCallback /*nullable*/ _onDispose;
 
-  VoidCallback _wrapOnDispose(VoidCallback? onDispose) {
+  VoidCallback _wrapOnDispose(VoidCallback /*nullable*/ onDispose) {
     return () {
       if (_isDisposeEventSent) return;
       _isDisposeEventSent = true;
