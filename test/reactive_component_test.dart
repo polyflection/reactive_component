@@ -192,10 +192,6 @@ class _MultifunctionalCounterWithCounterInputEvent with ReactiveComponent {
 
 class _Counter with ReactiveComponent {
   VoidReactiveSink _increment;
-  // FIXME: "this" is necessary here,
-  // otherwise it will cause compile error:
-  // " Error: Getter not found: 'disposer'.".
-  // Dart SDK version: 2.10.0-7.0.dev (dev) (Mon Aug 10 22:32:08 2020 +0200) on "macos_x64"
   VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
         _count.data++;
       }, disposer: disposer);
@@ -267,6 +263,42 @@ class _SubComponent with ReactiveComponent {
   final _aDisposeTarget = StreamController<int>();
 
   bool get isOwnADisposingTargetDisposed => _aDisposeTarget.isClosed;
+
+  @override
+  @protected
+  Future<void> doDispose() async {
+    await _aDisposeTarget.close();
+  }
+}
+
+class RootComponent with ReactiveComponent {
+  Stream<String> get aStreamValue => Stream.value('A String.');
+
+  __SubComponent __sub;
+  __SubComponent get _sub => __sub ??= __SubComponent(disposer: disposer);
+
+  Stream<int> get anIntStream => _sub.anIntStream;
+
+  ReactiveSink<int> __aSink;
+  ReactiveSink<int> get aSink => __aSink ??= ReactiveSink<int>((event) {
+        _aReactiveInt.data++;
+      }, disposer: disposer);
+
+  Reactive<int> __aReactiveInt;
+  Reactive<int> get _aReactiveInt =>
+      __aReactiveInt ??= Reactive<int>(0, disposer: disposer);
+}
+
+class __SubComponent with ReactiveComponent {
+  __SubComponent({ResourceDisposer /*nullable*/ disposer}) {
+    if (disposer != null) {
+      delegateDisposingTo(disposer);
+    }
+  }
+
+  final _aDisposeTarget = StreamController<int>();
+
+  Stream<int> get anIntStream => _aDisposeTarget.stream;
 
   @override
   @protected
