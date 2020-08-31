@@ -1,6 +1,6 @@
 # ReactiveComponent
 
-A Dart package for stream-based reactive programming, designed to support simplicity, composability, flexibility.
+A Dart package that supports stream-based reactive programming, designed for simplicity, composability, flexibility.
 
 ```dart
 class Counter with ReactiveComponent {
