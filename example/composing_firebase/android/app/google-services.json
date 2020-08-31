@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1032074004793",
+    "firebase_url": "https://reactive-component-example.firebaseio.com",
+    "project_id": "reactive-component-example",
+    "storage_bucket": "reactive-component-example.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032074004793:android:ac75d6c38a9f812a8f00e8",
+        "android_client_info": {
+          "package_name": "com.polyflection.composing_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032074004793-hf1t7mhs39bdp8gjg2ng79mcjcvg92l9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrC7BSnzwOBKTPENpGHlB1bSmN15TH7yY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032074004793-hf1t7mhs39bdp8gjg2ng79mcjcvg92l9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
