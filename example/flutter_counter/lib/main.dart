@@ -14,7 +14,8 @@ class _Counter with ReactiveComponent {
 
   final int _initialCount;
 
-  /// A [StreamSink] for adding an event to increment this counter.
+  /// A special kind of [StreamSink] with its own single stream listener
+  /// that handles for adding an event to increment this counter.
   ///
   /// The "increment();" is shorthand notation of "increment.add(null);".
   ///
@@ -24,18 +25,19 @@ class _Counter with ReactiveComponent {
   /// "dispose()" action of [ReactiveSink] can be delegated to
   /// [ReactiveComponent]'s disposer.
   ///
-  /// With null-safety feature, the notation will become conciser as below,
+  /// In current Dart spec, a lazy initialization technique with "??="
+  /// let them access the other instance members at its callback functions.
+  ///
+  /// When "null-safety" is available in a future Dart, thankfully the notation
+  /// will be conciser as below,
+  ///
   /// '''dart
   /// late final increment = VoidReactiveSink((_) {
   ///        _count.data++;
   ///      }, disposer: disposer);
   /// '''
   ///
-  /// Without null-safety feature, instead of "late final",
-  /// hand written lazy initialization technique should be used,
-  /// so that it can access the other instance members at its callback functions.
-  ///
-  /// For more information, see [ReactiveSink]'s documentation.
+  /// For more information, see [ReactiveSink]'s API documentation.
   VoidReactiveSink _increment;
   VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
         // Increments _count on a increment event is delivered.
@@ -47,23 +49,24 @@ class _Counter with ReactiveComponent {
   /// [Reactive] is a special kind of [StreamController] that holds its latest
   /// stream data, and sends that as the first data to any new listener.
   ///
-  /// With null-safety feature, the notation will become conciser as below,
+  /// In current Dart spec, a lazy initialization technique with "??="
+  /// let them access the other instance members at its callback functions.
+  ///
+  /// When "null-safety" is available in a future Dart, thankfully the notation
+  /// will be conciser as below,
+  ///
   /// '''dart
   /// late final _count = Reactive<int>(_initialCount, disposer: disposer);
   /// '''
   ///
-  /// Without null-safety feature, instead of "late final",
-  /// hand written lazy initialization technique should be used, so that
-  /// it can access the other instance members at its callback functions.
-  ///
-  /// For more information, see [Reactive]'s documentation.
+  /// For more information, see [Reactive]'s API documentation.
   Reactive<int> __count;
   Reactive<int> get _count =>
       __count ??= Reactive<int>(_initialCount, disposer: disposer);
 
   /// Publicize only the stream of [_count] to hide its data mutating
   /// and the other behaviors.
-  /// It's a good point to transform the stream if it is necessary.
+  /// It's a good point to transform the stream as necessary.
   Stream<int> get count => _count.stream;
 }
 
