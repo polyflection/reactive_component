@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:composing_firebase/anonymous_messages/messages_repository.dart';
 import 'package:composing_firebase/authentication/user.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:reactive_component/reactive_component.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 /// MessageComposer for AnonymousMessages.
 ///
@@ -64,8 +65,6 @@ class MessageComposer with ReactiveComponent {
             // There is a chance to send the error to a server here.
             _sendPhase.data = _SendPhaseData.failure(error, stackTrace);
           } finally {
-            // Or, delayed?
-
             _form.data = _form.data.._clear();
             _sendPhase.data = _SendPhaseData.ready();
           }
@@ -81,14 +80,13 @@ class MessageComposer with ReactiveComponent {
   Reactive<_SendPhaseData> get _sendPhase => __sendPhase ??=
       Reactive<_SendPhaseData>(_SendPhaseData.ready(), disposer: disposer);
 
-  Stream<bool> get canSend => CombineLatestStream.combine2(
-      _sendPhase.stream,
-      _form.stream,
-      (phase, form) => phase.phase == _SendPhaseKind.ready && form.isValid);
+  Stream<bool> get canSend =>
+      _sendPhase.stream.combineLatest<MessageForm, bool>(_form.stream,
+          (phase, form) => phase.phase == _SendPhaseKind.ready && form.isValid);
 
   Stream<void> get sent => _sendPhase.stream
       .where((e) => e.phase == _SendPhaseKind.success)
-      .mapTo(null);
+      .map((e) => null);
 
   Stream<String> get errorMessage => _sendPhase.stream
       .where((e) => e.phase == _SendPhaseKind.failure)

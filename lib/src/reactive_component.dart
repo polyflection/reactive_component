@@ -12,8 +12,8 @@ import 'sinks.dart';
 /// It can be a delegate to its instance members of [ReactiveResource]
 /// via [disposer], for disposing of their resources together.
 ///
-/// It is designed as mixin to avoid inheritance deliberately,
-/// so that a subclass can freely inherit from other class as necessary.
+/// Deliberately, it is designed as mixin, so that a subclass can freely
+/// inherit from other class as necessary.
 ///
 /// # Simple example
 ///
@@ -77,7 +77,7 @@ import 'sinks.dart';
 /// More examples are listed on this package's example/ directory, including
 /// complex composed components, and composing Firebase.
 ///
-/// https://github.com/polyflection/reactive_component/tree/non_null_safety/example
+/// https://github.com/polyflection/reactive_component/tree/master/example
 @streamIO
 mixin ReactiveComponent implements ReactiveResource {
   /// A [VoidSink] to dispose of the resources.

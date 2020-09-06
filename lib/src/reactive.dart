@@ -21,16 +21,16 @@ import 'typedef.dart';
 ///
 /// # Example
 ///
-/// ```
+/// ```dart
 /// final aReactiveInt = Reactive<int>(0, disposer: null);
 ///
 /// aReactiveInt.data = 1;
+/// aReactiveInt.stream.listen(print); // prints 1 2 3.
 /// aReactiveInt.data = 2;
+/// aReactiveInt.stream.listen(print); // prints 2 3.
 /// aReactiveInt.data = 3;
-///
 /// aReactiveInt.stream.listen(print); // prints 3.
-/// aReactiveInt.stream.listen(print); // prints 3.
-/// aReactiveInt.stream.listen(print); // prints 3.
+/// print(aReactiveInt.data); // prints 3.
 /// ```
 ///
 /// # Disposing its resource, or delegating to other [ReactiveResource].
@@ -48,6 +48,30 @@ import 'typedef.dart';
 /// Only a stream of a Reactive data should be publicized.
 /// Static analysis support is planned to prevent Reactive from being
 /// publicized.
+///
+/// ```dart
+/// class C with ReactiveComponent {
+///   Reactive<int> __aReactiveInt;
+///   Reactive<int> get _aReactiveInt =
+///       Reactive<int>(0, disposer: disposer);
+///
+///   Stream<int> get anIntStream => _aReactiveInt.stream;
+/// }
+/// ```
+/// In current Dart spec, a lazy initialization technique with "??=" let them
+/// access the other instance members at its callback functions.
+///
+/// When "null-safety" is available in a future Dart, thankfully
+/// the notation will be conciser as below,
+///
+/// ```dart
+/// class C with ReactiveComponent {
+///   late final Reactive<int> _aReactiveInt =
+///       Reactive<int>(0, disposer: disposer);
+///
+///   Stream<int> get anIntStream => _aReactiveInt.stream;
+/// }
+/// ```
 class Reactive<D> with ReactiveResource implements StreamController<D> {
   /// Creates a [Reactive] data with its initial data, and
   /// optional parameters of disposer and callbacks.

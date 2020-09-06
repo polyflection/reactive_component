@@ -1,10 +1,10 @@
 name: reactive_component
-description: A package that supports stream-based reactive programming.
-version: 0.1.2
+description: A package that supports for creating stream-based reactive components.
+version: 0.1.2+1
 homepage: https://github.com/polyflection/reactive_component
 
 environment:
-  sdk: '>=2.9.0 <3.0.0'
+  sdk: ">=2.9.0 <3.0.0"
 
 dependencies:
   meta: ^1.0.0
