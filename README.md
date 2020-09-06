@@ -8,7 +8,7 @@ It is yet another state management package. It can be applied to any size of app
 
 When a ReactiveComponent wraps a domain model, it is described as implementing BLoC design pattern.
 
-## A quick example: counter model.
+# A quick example: counter model.
 
 ```dart
 /// [ReactiveComponent] is a unit that encapsulates its members
@@ -64,14 +64,14 @@ class Counter with ReactiveComponent {
 
 For a complete Flutter counter app example with more detailed comments, see [Flutter counter example](example/flutter_counter/lib/main.dart).
 
-## Examples
+# Examples
 
 [There are two examples.](example/)
 
 - Flutter Counter
 - Composing Firebase
 
-## Motivation
+# Motivation
 
 For simple app state management, [ChangeNotifier and ValueNotifier are sufficient](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple), although they are not suitable for fairly large apps that have many complex models.
 
@@ -87,9 +87,9 @@ Handling a model's state and the output stream is fortunately simple thanks to `
 
 ReactiveComponent significantly reduces the boilerplate code of handling Sinks and Streams in a component model by its key features, while it still retains the flexibility to be partially composed of raw Streams as necessary ( e.g. when handling a Firestore's Stream ).
 
-## Key features
+# Key features
 
-### ReactiveComponent
+## ReactiveComponent
 
 ```dart
 class C with ReactiveComponent {}
@@ -105,7 +105,7 @@ via [disposer], for disposing of their resources together. [Reactive], [Reactive
 
 For more explanations, see [the API documentation](https://pub.dev/documentation/reactive_component/latest/reactive_component/ReactiveComponent-mixin.html).
 
-### Reactive
+## Reactive
 
 Reactive is a special kind of [StreamController] that holds its latest stream data, and sends that as the first data to any new listener.
 
@@ -127,7 +127,7 @@ print(aReactiveInt.data); // prints 3.
 
 For more explanations, including "Disposing its resource" and "Reactive data should be encapsulated in a ReactiveComponent", see [the API documentation](https://pub.dev/documentation/reactive_component/latest/reactive_component/Reactive-class.html).
 
-### ReactiveSink
+## ReactiveSink
 
 ReactiveSink is a special kind of [StreamSink] with its own single stream listener that handles the event data.
 An event stream can be transformed by transform callback function
@@ -153,20 +153,20 @@ its constructor.
 
 For more explanations, including "Disposing its resource", see [the API documentation](https://pub.dev/documentation/reactive_component/latest/reactive_component/ReactiveSink-class.html).
 
-### Sub components
+## Sub components
 
 ReactiveComponent can be nesting. The documentation will be added.
 
 See [Sub components pattern](doc/sub_components_pattern.md).
 
-### Platform agnostic
+## Platform agnostic
 
 ReactiveComponent is a platform-agnostic pure Dart package. It works in any platform, such as a Flutter app, an AngularDart app, a console app, or a Dart package.
 
-## Status
+# Status
 
 The core features are almost stable. A few APIs will likely change. More features are planned, such as a hook API for both ReactiveSink and Reactive, some static analysis supports.
 
-## Features and bugs
+# Features and bugs
 
 Please file feature requests and bugs at the [issue tracker](https://github.com/polyflection/reactive_component/issues).
