@@ -55,8 +55,7 @@ class Counter with ReactiveComponent {
     _count.data++;
   }, disposer: disposer);
 
-  late final Reactive<int> _count =
-      Reactive<int>(_initialCount, disposer: disposer);
+  late final _count = Reactive<int>(_initialCount, disposer: disposer);
 
   Stream<int> get count => _count.stream;
 }
@@ -130,8 +129,7 @@ For more explanations, including "Disposing its resource" and "Reactive data sho
 ## ReactiveSink
 
 ReactiveSink is a special kind of [StreamSink] with its own single stream listener that handles the event data.
-An event stream can be transformed by transform callback function
-passed at the constructor.
+Its event stream can be transformed by transform callback function passed at the constructor.
 
 ```dart
 var i = 0;
@@ -147,9 +145,7 @@ Future.microtask(() {
 });
 ```
 
-To save CPU and memory usage, the stream is lazily listened when a first
-data is added to the sink, or [HandleSubscription] is passed to
-its constructor.
+To save CPU and memory usage, the stream is lazily listened when a first data is added to the sink, or [HandleSubscription] is passed to its constructor.
 
 For more explanations, including "Disposing its resource", see [the API documentation](https://pub.dev/documentation/reactive_component/latest/reactive_component/ReactiveSink-class.html).
 

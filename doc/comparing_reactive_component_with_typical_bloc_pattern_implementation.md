@@ -32,7 +32,7 @@ Implementing sink input is cumbersome. The implementation is scattered in four d
 
 When a programmer want to see how an input data of a sink is handled, one have to look for it because the handler's implementation is separated in different place, usually in a constructor body. If it is nomal method decralation, a programmer can find the implementation immediately.
 
-If more sinks are implemented, the codebase become messy quickly.
+If more sinks are implemented, the codebase quickly become messy.
 
 Handling a count state and the output stream is fortunately simple thanks to `BehaviorSubject` in RxDart. But it depends on RxDart anyway.
 
@@ -79,7 +79,7 @@ class Counter with ReactiveComponent {
         _count.data++;
       }, disposer: disposer);
 
-  Reactive<int> _count = Reactive<int>(_initialCount, disposer: disposer);
+  late final _count = Reactive<int>(_initialCount, disposer: disposer);
 
   Stream<int> get count => _count.stream;
 }
