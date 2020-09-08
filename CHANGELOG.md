@@ -1,3 +1,7 @@
+# 0.1.2+3
+
+- Improve documentations.
+
 # 0.1.2+2
 
 - Improve README.
