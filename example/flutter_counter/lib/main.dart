@@ -32,7 +32,7 @@ class _Counter with ReactiveComponent {
   /// will be conciser as below,
   ///
   /// '''dart
-  /// late final increment = VoidReactiveSink((_) {
+  /// late final increment = VoidReactiveSink(() {
   ///        _count.data++;
   ///      }, disposer: disposer);
   /// '''

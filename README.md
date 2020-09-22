@@ -21,7 +21,7 @@ class Counter with ReactiveComponent {
   /// A special kind of [StreamSink] with its own single stream listener
   /// that handles the event data.
   VoidReactiveSink _increment;
-  VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
+  VoidReactiveSink get increment => _increment ??= VoidReactiveSink(() {
         // Increments _count on a increment event is delivered.
         _count.data++;
       }, disposer: disposer);
@@ -51,7 +51,7 @@ class Counter with ReactiveComponent {
 
   final int _initialCount;
 
-  late final VoidReactiveSink increment = VoidReactiveSink((_) {
+  late final VoidReactiveSink increment = VoidReactiveSink(() {
     _count.data++;
   }, disposer: disposer);
 
