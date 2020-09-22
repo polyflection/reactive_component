@@ -45,14 +45,14 @@ void main() {
         expect(sink.eventStreamSubscription, isNotNull);
       });
       test('On addStream.', () async {
-        final sink = ReactiveSink<int>((event) {}, disposer: null);
+        final sink = ReactiveStreamSink<int>((event) {}, disposer: null);
         expect(sink.eventStreamSubscription, isNull);
         await sink.addStream(Stream.value(1));
         expect(sink.eventStreamSubscription, isNotNull);
       });
       test('On addError.', () async {
-        final sink =
-            ReactiveSink<int>((event) {}, onError: (e, s) {}, disposer: null);
+        final sink = ReactiveEventSink<int>((event) {},
+            onError: (e, s) {}, disposer: null);
         expect(sink.eventStreamSubscription, isNull);
         sink.addError(Error());
         expect(sink.eventStreamSubscription, isNotNull);
@@ -135,7 +135,7 @@ void main() {
 
   group('Dispose.', () {
     group('Delegating disposing.', () {
-      ReactiveSink<int> sink;
+      ReactiveStreamSink<int> sink;
       ResourceDisposer disposer;
       var isEventHandled = false;
 
@@ -164,7 +164,7 @@ void main() {
 
       test('Dispose by dispose() on pause', () async {
         StreamSubscription<int> subscription;
-        sink = ReactiveSink<int>((event) {}, disposer: disposer,
+        sink = ReactiveStreamSink<int>((event) {}, disposer: disposer,
             handleSubscription: (s) {
           subscription = s;
         });
@@ -229,7 +229,7 @@ void main() {
   group(VoidReactiveSink, () {
     test('Add null by call.', () async {
       var reached = false;
-      final sink = VoidReactiveSink((_) {
+      final sink = VoidReactiveSink(() {
         reached = true;
       }, disposer: null);
       sink();
@@ -239,7 +239,7 @@ void main() {
   });
 }
 
-Future<void> _expectSinkWillBeDisposed(ReactiveSink sink) async {
+Future<void> _expectSinkWillBeDisposed(ReactiveStreamSink<int> sink) async {
   await expectLater(sink.disposed.first, completion(null));
   await expectLater(sink.done, completion(null));
   await expectLater(sink.testSinkDone(), completion(null));

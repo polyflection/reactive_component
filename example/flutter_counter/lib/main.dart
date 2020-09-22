@@ -39,7 +39,7 @@ class _Counter with ReactiveComponent {
   ///
   /// For more information, see [ReactiveSink]'s API documentation.
   VoidReactiveSink _increment;
-  VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
+  VoidReactiveSink get increment => _increment ??= VoidReactiveSink(() {
         // Increments _count on a increment event is delivered.
         _count.data++;
       }, disposer: disposer);

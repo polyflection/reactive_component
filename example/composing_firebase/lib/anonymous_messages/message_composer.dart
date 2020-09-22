@@ -35,7 +35,7 @@ class MessageComposer with ReactiveComponent {
   final MessagesAddingRepository _repository;
 
   ReactiveSink<String> _updateMessageText;
-  ReactiveSink<String> get updateMessageText =>
+  ReactiveStreamSink<String> get updateMessageText =>
       _updateMessageText ??
       ReactiveSink<String>((message) {
         final data = _form.data;
@@ -47,7 +47,7 @@ class MessageComposer with ReactiveComponent {
 
   VoidReactiveSink _send;
   VoidReactiveSink get send =>
-      _send ??= VoidReactiveSink((_) {}, transform: (stream) {
+      _send ??= VoidReactiveSink(() {}, transform: (stream) {
         return stream.exhaustMap((_) async* {
           _sendPhase.data = _SendPhaseData.doing();
 
