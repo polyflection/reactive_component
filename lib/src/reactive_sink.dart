@@ -93,6 +93,10 @@ abstract class ReactiveSink<T> implements Sink<T> {
   /// For only testing.
   @visibleForTesting
   StreamSubscription<T> eventStreamSubscription;
+
+  /// For only testing.
+  @visibleForTesting
+  Future<void> testSinkDone();
 }
 
 /// A [ReactiveSink] that implements [EventSink].
@@ -149,10 +153,6 @@ abstract class ReactiveStreamSink<T> extends ReactiveEventSink<T>
   /// This is a future of "[disposed].first;".
   @override
   Future<void> get done;
-
-  /// For only testing.
-  @visibleForTesting
-  Future<void> testSinkDone();
 }
 
 /// [ReactiveSink] of [void] type.
@@ -188,6 +188,10 @@ abstract class VoidReactiveSink implements Sink<void> {
 
   /// A stream to notify the resource has been disposed of.
   Stream get disposed;
+
+  /// For only testing.
+  @visibleForTesting
+  StreamSubscription<void> eventStreamSubscription;
 }
 
 /// A [VoidReactiveSink] that implements [EventSink].
