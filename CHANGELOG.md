@@ -1,3 +1,13 @@
+# 0.2.0
+
+- Breaking change: divide ReactiveSink into three classes.
+
+ReactiveSink is divided into ReactiveSink, ReactiveEventSink, and ReactiveStreamSink.
+Also, VoidReactiveSink is divided into VoidReactiveSink, VoidReactiveEventSink, and VoidReactiveStreamSink. 
+
+Each VoidReactiveSink, VoidReactiveEventSink, and VoidReactiveStreamSink takes a first positional
+ parameter as `void Function()` instead of `void Function(void data)`.
+
 # 0.1.2+3
 
 - Improve documentations.

@@ -192,7 +192,7 @@ class _MultifunctionalCounterWithCounterInputEvent with ReactiveComponent {
 
 class _Counter with ReactiveComponent {
   VoidReactiveSink _increment;
-  VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
+  VoidReactiveSink get increment => _increment ??= VoidReactiveSink(() {
         _count.data++;
       }, disposer: disposer);
 

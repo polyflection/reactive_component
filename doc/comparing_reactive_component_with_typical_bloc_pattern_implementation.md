@@ -46,7 +46,7 @@ class Counter with ReactiveComponent {
   final int _initialCount;
 
   VoidReactiveSink _increment;
-  VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
+  VoidReactiveSink get increment => _increment ??= VoidReactiveSink(() {
         _count.data++;
       }, disposer: disposer);
 
@@ -75,7 +75,7 @@ class Counter with ReactiveComponent {
   Counter(this._initialCount);
   final int _initialCount;
 
-  late final VoidReactiveSink increment = VoidReactiveSink((_) {
+  late final VoidReactiveSink increment = VoidReactiveSink(() {
         _count.data++;
       }, disposer: disposer);
 
