@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:composing_firebase/anonymous_messages/messages_repository.dart';
 import 'package:composing_firebase/authentication/user.dart';

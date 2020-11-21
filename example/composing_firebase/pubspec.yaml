@@ -18,16 +18,16 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.9.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.3
-  firebase_core: ^0.5.0
-  firebase_auth: ^0.18.0+1
-  cloud_firestore: ^0.14.0+2
-  firebase_analytics: ^6.0.0
+  cupertino_icons: ^1.0.0
+  firebase_core: ^0.5.1
+  firebase_auth: ^0.18.3
+  cloud_firestore: ^0.14.3
+  firebase_analytics: ^6.2.0
   # Adopted package:provider in this project, but any other packages such as package:get_it
   # will also a good option with package:reactive_component.
   provider: ^4.0.0
@@ -35,11 +35,11 @@ dependencies:
     path: ../../
   stream_transform: ^1.2.0
   rxdart: ^0.24.1
-  pedantic:
+  pedantic: ^1.10.0-nullsafety.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  test:
+  test: ^1.16.0-nullsafety.12
   mockito:
 
 # For information on the generic Dart part of this file, see the

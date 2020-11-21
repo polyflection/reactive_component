@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 
 import 'package:composing_firebase/anonymous_messages/anonymous_messages.dart';
@@ -272,14 +273,14 @@ class _MessageComposerController {
     });
 
     _model.sent.forEach((_) {
-      Scaffold.of(_context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(_context).showSnackBar(SnackBar(
         content: Text('Sent!'),
         backgroundColor: Colors.blue,
       ));
     });
 
     _model.errorMessage.forEach((message) {
-      Scaffold.of(_context).showSnackBar(
+      ScaffoldMessenger.of(_context).showSnackBar(
           SnackBar(content: Text(message), backgroundColor: Colors.red));
     });
   }
