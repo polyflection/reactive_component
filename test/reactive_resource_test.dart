@@ -11,7 +11,7 @@ void main() {
     test('Dispose.', () async {
       final c = _Resource()..dispose();
       await pumpEventQueue();
-      await expectLater(c.disposed.first, completion(null));
+      await expectLater(c.disposed.first, completion(isNull));
     });
 
     group('Delegating a resource disposing', () {
@@ -26,9 +26,9 @@ void main() {
         root.dispose();
         await pumpEventQueue();
 
-        await expectLater(root.disposed.first, completion(null));
-        await expectLater(sub.disposed.first, completion(null));
-        await expectLater(subSub.disposed.first, completion(null));
+        await expectLater(root.disposed.first, completion(isNull));
+        await expectLater(sub.disposed.first, completion(isNull));
+        await expectLater(subSub.disposed.first, completion(isNull));
       });
     });
 
@@ -40,7 +40,7 @@ void main() {
       root.dispose();
       root.ownResourceSink.add(1);
       await pumpEventQueue();
-      await expectLater(root.disposed.first, completion(null));
+      await expectLater(root.disposed.first, completion(isNull));
       expect(root.isOwnResourceDisposed, isTrue);
       expect(root.isOwnResourceEventHandled, isFalse);
 
@@ -48,7 +48,7 @@ void main() {
       sub.publiclyDelegateDisposingTo(root.publicizedDisposer);
       sub.ownResourceSink.add(1);
       await pumpEventQueue();
-      await expectLater(sub.disposed.first, completion(null));
+      await expectLater(sub.disposed.first, completion(isNull));
       expect(sub.isOwnResourceDisposed, isTrue);
       expect(sub.isOwnResourceEventHandled, isFalse);
     });
@@ -57,7 +57,7 @@ void main() {
 
 class _Resource with ReactiveResource {
   _Resource() {
-    _subscription = _ownResource.stream.listen((e) {
+    _subscription = _ownResource.stream.listen((_) {
       _isEventHandled = true;
     });
   }
@@ -69,7 +69,7 @@ class _Resource with ReactiveResource {
 
   Sink<int> get ownResourceSink => _ownResource.sink;
   final _ownResource = StreamController<int>();
-  StreamSubscription<int> /*nullable*/ _subscription;
+  StreamSubscription<int>? _subscription;
 
   bool _done = false;
   bool _isEventHandled = false;
@@ -78,8 +78,8 @@ class _Resource with ReactiveResource {
 
   @override
   void onDispose() {
-    _subscription?.onData((_) {});
-    _subscription?.onError((_) {});
+    _subscription?.onData(null);
+    _subscription?.onError(null);
     super.onDispose();
   }
 

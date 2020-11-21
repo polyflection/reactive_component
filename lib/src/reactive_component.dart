@@ -88,7 +88,7 @@ mixin ReactiveComponent implements ReactiveResource {
   @override
   Stream<void> get disposed => disposer.disposed;
 
-  ResourceDisposer _disposer;
+  ResourceDisposer? _disposer;
 
   /// A subject of disposing the resources.
   ///
@@ -154,7 +154,7 @@ mixin ReactiveOutputComponent implements ReactiveResource {
   @override
   Stream<void> get disposed => disposer.disposed;
 
-  ResourceDisposer _disposer;
+  ResourceDisposer? _disposer;
 
   /// A subject of disposing the resources.
   ///

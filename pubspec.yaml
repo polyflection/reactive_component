@@ -4,11 +4,11 @@ version: 0.2.0
 homepage: https://github.com/polyflection/reactive_component
 
 environment:
-  sdk: ">=2.9.0 <3.0.0"
+  sdk: '>=2.12.0-29.10.beta <3.0.0'
 
 dependencies:
-  meta: ^1.0.0
-  pedantic: ^1.9.0
+  meta: ^1.3.0-nullsafety.6
+  pedantic: ^1.10.0-nullsafety.3
 
 dev_dependencies:
-  test:
+  test: ^1.16.0-nullsafety.11

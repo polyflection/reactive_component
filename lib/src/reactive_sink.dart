@@ -6,9 +6,16 @@ import 'resource_disposer.dart';
 import 'sinks.dart';
 import 'typedef.dart';
 
+/// TODO: document it.
 typedef OnData<T> = void Function(T data);
+
+/// TODO: document it.
 typedef Transform<T> = Stream<T> Function(Stream<T> stream);
+
+/// TODO: document it.
 typedef OnError = void Function(Object error, StackTrace stackTrace);
+
+/// TODO: document it.
 typedef HandleSubscription<T> = void Function(
     StreamSubscription<T> subscription);
 
@@ -63,17 +70,16 @@ abstract class ReactiveSink<T> implements Sink<T> {
   /// [handleSubscription] is the callback to get the [StreamSubscription] of
   /// the event stream.
   factory ReactiveSink(OnData<T> onData,
-          {Transform<T> /*nullable*/ transform,
-          @required ResourceDisposer /*nullable*/ disposer,
-          VoidCallback /*nullable*/ onDispose,
-          OnError /*nullable*/ onError,
-          bool /*nullable*/ cancelOnError,
-          VoidCallback /*nullable*/ onListen,
-          VoidCallback /*nullable*/ onPause,
-          VoidCallback /*nullable*/ onResume,
-          VoidCallback /*nullable*/ onCancel,
-          HandleSubscription<T> /*nullable*/ handleSubscription}) =
-      _ReactiveStreamSink<T>;
+      {Transform<T>? transform,
+      required ResourceDisposer? disposer,
+      VoidCallback? onDispose,
+      OnError? onError,
+      bool? cancelOnError,
+      VoidCallback? onListen,
+      VoidCallback? onPause,
+      VoidCallback? onResume,
+      VoidCallback? onCancel,
+      HandleSubscription<T> handleSubscription}) = _ReactiveStreamSink<T>;
 
   /// Adds [event] to the sink.
   ///
@@ -92,7 +98,7 @@ abstract class ReactiveSink<T> implements Sink<T> {
 
   /// For only testing.
   @visibleForTesting
-  StreamSubscription<T> eventStreamSubscription;
+  StreamSubscription<T>? eventStreamSubscription;
 
   /// For only testing.
   @visibleForTesting
@@ -106,23 +112,22 @@ abstract class ReactiveEventSink<T> extends ReactiveSink<T>
   ///
   /// See [ReactiveSink] constructor's API documentation.
   factory ReactiveEventSink(OnData<T> onData,
-          {Transform<T> /*nullable*/ transform,
-          @required ResourceDisposer /*nullable*/ disposer,
-          VoidCallback /*nullable*/ onDispose,
-          OnError /*nullable*/ onError,
-          bool /*nullable*/ cancelOnError,
-          VoidCallback /*nullable*/ onListen,
-          VoidCallback /*nullable*/ onPause,
-          VoidCallback /*nullable*/ onResume,
-          VoidCallback /*nullable*/ onCancel,
-          HandleSubscription<T> /*nullable*/ handleSubscription}) =
-      _ReactiveStreamSink<T>;
+      {Transform<T>? transform,
+      required ResourceDisposer? disposer,
+      VoidCallback? onDispose,
+      OnError? onError,
+      bool? cancelOnError,
+      VoidCallback? onListen,
+      VoidCallback? onPause,
+      VoidCallback? onResume,
+      VoidCallback? onCancel,
+      HandleSubscription<T> handleSubscription}) = _ReactiveStreamSink<T>;
 
   /// Adds [error] to the sink.
   ///
   /// Unlike [Sink], [addError] is ignored after a call to [dispose].
   @override
-  void addError(Object error, [StackTrace /*nullable*/ stackTrace]);
+  void addError(Object error, [StackTrace? stackTrace]);
 }
 
 /// A [ReactiveSink] that implements [StreamSink].
@@ -132,17 +137,16 @@ abstract class ReactiveStreamSink<T> extends ReactiveEventSink<T>
   ///
   /// See [ReactiveSink] constructor's API documentation.
   factory ReactiveStreamSink(OnData<T> onData,
-          {Transform<T> /*nullable*/ transform,
-          @required ResourceDisposer /*nullable*/ disposer,
-          VoidCallback /*nullable*/ onDispose,
-          OnError /*nullable*/ onError,
-          bool /*nullable*/ cancelOnError,
-          VoidCallback /*nullable*/ onListen,
-          VoidCallback /*nullable*/ onPause,
-          VoidCallback /*nullable*/ onResume,
-          VoidCallback /*nullable*/ onCancel,
-          HandleSubscription<T> /*nullable*/ handleSubscription}) =
-      _ReactiveStreamSink<T>;
+      {Transform<T>? transform,
+      required ResourceDisposer? disposer,
+      VoidCallback? onDispose,
+      OnError? onError,
+      bool? cancelOnError,
+      VoidCallback? onListen,
+      VoidCallback? onPause,
+      VoidCallback? onResume,
+      VoidCallback? onCancel,
+      HandleSubscription<T> handleSubscription}) = _ReactiveStreamSink<T>;
 
   /// Adds [stream] to the sink.
   ///
@@ -161,17 +165,16 @@ abstract class VoidReactiveSink implements Sink<void> {
   ///
   /// See [ReactiveSink] constructor's API documentation.
   factory VoidReactiveSink(VoidCallback onVoidData,
-          {Transform<void> /*nullable*/ transform,
-          @required ResourceDisposer /*nullable*/ disposer,
-          VoidCallback /*nullable*/ onDispose,
-          OnError /*nullable*/ onError,
-          bool /*nullable*/ cancelOnError,
-          VoidCallback /*nullable*/ onListen,
-          VoidCallback /*nullable*/ onPause,
-          VoidCallback /*nullable*/ onResume,
-          VoidCallback /*nullable*/ onCancel,
-          HandleSubscription<void> /*nullable*/ handleSubscription}) =
-      _VoidReactiveStreamSink;
+      {Transform<void>? transform,
+      required ResourceDisposer? disposer,
+      VoidCallback? onDispose,
+      OnError? onError,
+      bool? cancelOnError,
+      VoidCallback? onListen,
+      VoidCallback? onPause,
+      VoidCallback? onResume,
+      VoidCallback? onCancel,
+      HandleSubscription<void>? handleSubscription}) = _VoidReactiveStreamSink;
 
   /// Adds void to the sink.
   ///
@@ -191,7 +194,7 @@ abstract class VoidReactiveSink implements Sink<void> {
 
   /// For only testing.
   @visibleForTesting
-  StreamSubscription<void> eventStreamSubscription;
+  late final StreamSubscription<void>? eventStreamSubscription;
 }
 
 /// A [VoidReactiveSink] that implements [EventSink].
@@ -201,23 +204,22 @@ abstract class VoidReactiveEventSink extends VoidReactiveSink
   ///
   /// See [ReactiveSink] constructor's API documentation.
   factory VoidReactiveEventSink(VoidCallback onVoidData,
-          {Transform<void> /*nullable*/ transform,
-          @required ResourceDisposer /*nullable*/ disposer,
-          VoidCallback /*nullable*/ onDispose,
-          OnError /*nullable*/ onError,
-          bool /*nullable*/ cancelOnError,
-          VoidCallback /*nullable*/ onListen,
-          VoidCallback /*nullable*/ onPause,
-          VoidCallback /*nullable*/ onResume,
-          VoidCallback /*nullable*/ onCancel,
-          HandleSubscription<void> /*nullable*/ handleSubscription}) =
-      _VoidReactiveStreamSink;
+      {Transform<void>? transform,
+      required ResourceDisposer? disposer,
+      VoidCallback? onDispose,
+      OnError? onError,
+      bool? cancelOnError,
+      VoidCallback? onListen,
+      VoidCallback? onPause,
+      VoidCallback? onResume,
+      VoidCallback? onCancel,
+      HandleSubscription<void>? handleSubscription}) = _VoidReactiveStreamSink;
 
   /// Adds [error] to the sink.
   ///
   /// Unlike [Sink], [addError] is ignored after a call to [dispose].
   @override
-  void addError(Object error, [StackTrace /*nullable*/ stackTrace]);
+  void addError(Object error, [StackTrace? stackTrace]);
 }
 
 /// A [VoidReactiveSink] that implements [StreamSink].
@@ -227,17 +229,16 @@ abstract class VoidReactiveStreamSink extends VoidReactiveEventSink
   ///
   /// See [ReactiveSink] constructor's API documentation.
   factory VoidReactiveStreamSink(VoidCallback onVoidData,
-          {Transform<void> /*nullable*/ transform,
-          @required ResourceDisposer /*nullable*/ disposer,
-          VoidCallback /*nullable*/ onDispose,
-          OnError /*nullable*/ onError,
-          bool /*nullable*/ cancelOnError,
-          VoidCallback /*nullable*/ onListen,
-          VoidCallback /*nullable*/ onPause,
-          VoidCallback /*nullable*/ onResume,
-          VoidCallback /*nullable*/ onCancel,
-          HandleSubscription<void> /*nullable*/ handleSubscription}) =
-      _VoidReactiveStreamSink;
+      {Transform<void>? transform,
+      required ResourceDisposer? disposer,
+      VoidCallback? onDispose,
+      OnError? onError,
+      bool? cancelOnError,
+      VoidCallback? onListen,
+      VoidCallback? onPause,
+      VoidCallback? onResume,
+      VoidCallback? onCancel,
+      HandleSubscription<void>? handleSubscription}) = _VoidReactiveStreamSink;
 
   /// Adds [stream] to the sink.
   ///
@@ -250,16 +251,16 @@ class _ReactiveStreamSink<T>
     with ReactiveResource
     implements ReactiveStreamSink<T> {
   _ReactiveStreamSink(this._onEvent,
-      {Transform<T> /*nullable*/ transform,
-      @required ResourceDisposer /*nullable*/ disposer,
-      VoidCallback /*nullable*/ onDispose,
-      OnError /*nullable*/ onError,
-      bool /*nullable*/ cancelOnError,
-      VoidCallback /*nullable*/ onListen,
-      VoidCallback /*nullable*/ onPause,
-      VoidCallback /*nullable*/ onResume,
-      VoidCallback /*nullable*/ onCancel,
-      HandleSubscription<T> /*nullable*/ handleSubscription})
+      {Transform<T>? transform,
+      required ResourceDisposer? disposer,
+      VoidCallback? onDispose,
+      OnError? onError,
+      bool? cancelOnError,
+      VoidCallback? onListen,
+      VoidCallback? onPause,
+      VoidCallback? onResume,
+      VoidCallback? onCancel,
+      HandleSubscription<T>? handleSubscription})
       : _transform = transform,
         _onDispose = onDispose,
         _onError = onError,
@@ -273,7 +274,7 @@ class _ReactiveStreamSink<T>
     }
     if (handleSubscription != null) {
       _listenOnce();
-      handleSubscription(eventStreamSubscription);
+      handleSubscription(eventStreamSubscription!);
     }
   }
 
@@ -292,7 +293,7 @@ class _ReactiveStreamSink<T>
   }
 
   @override
-  void addError(Object error, [StackTrace /*nullable*/ stackTrace]) {
+  void addError(Object error, [StackTrace? stackTrace]) {
     if (isDisposeEventSent) return;
 
     _listenOnce();
@@ -337,33 +338,31 @@ class _ReactiveStreamSink<T>
   }
 
   final OnData<T> _onEvent;
-  final Transform<T> /*nullable*/ _transform;
-  final VoidCallback /*nullable*/ _onDispose;
-  final OnError /*nullable*/ _onError;
-  final bool /*nullable*/ _cancelOnError;
-  final VoidCallback /*nullable*/ _onListen;
-  final VoidCallback /*nullable*/ _onPause;
-  final VoidCallback /*nullable*/ _onResume;
-  final VoidCallback /*nullable*/ _onCancel;
+  final Transform<T>? _transform;
+  final VoidCallback? _onDispose;
+  final OnError? _onError;
+  final bool? _cancelOnError;
+  final VoidCallback? _onListen;
+  final VoidCallback? _onPause;
+  final VoidCallback? _onResume;
+  final VoidCallback? _onCancel;
 
-  StreamController<T> __eventStreamController;
-  StreamController<T> get _eventStreamController =>
-      __eventStreamController ??= StreamController<T>(
-          onListen: _onListen,
-          onPause: _onPause,
-          onResume: _onResume,
-          onCancel: _onCancel);
+  late final StreamController<T> _eventStreamController = StreamController<T>(
+      onListen: _onListen,
+      onPause: _onPause,
+      onResume: _onResume,
+      onCancel: _onCancel);
 
   @visibleForTesting
   @override
-  /*late final*/ StreamSubscription<T> /*nullable*/ eventStreamSubscription;
+  StreamSubscription<T>? eventStreamSubscription;
 
   /// Closes [_eventStreamController]'s sink.
   Future<void> _doCloseSink() async {
     if (_eventStreamController.isClosed) return;
 
     if (_eventStreamController.hasListener) {
-      return eventStreamSubscription.cancel();
+      return eventStreamSubscription?.cancel();
     } else {
       if (eventStreamSubscription == null) {
         // If a stream is not listened, a sink will not be done.
@@ -388,16 +387,16 @@ class _VoidReactiveStreamSink extends _ReactiveStreamSink<void>
     implements VoidReactiveStreamSink {
   factory _VoidReactiveStreamSink(
     VoidCallback onVoidData, {
-    Transform<void> /*nullable*/ transform,
-    @required ResourceDisposer /*nullable*/ disposer,
-    VoidCallback /*nullable*/ onDispose,
-    OnError /*nullable*/ onError,
-    bool /*nullable*/ cancelOnError,
-    VoidCallback /*nullable*/ onListen,
-    VoidCallback /*nullable*/ onPause,
-    VoidCallback /*nullable*/ onResume,
-    VoidCallback /*nullable*/ onCancel,
-    HandleSubscription<void> /*nullable*/ handleSubscription,
+    Transform<void>? transform,
+    required ResourceDisposer? disposer,
+    VoidCallback? onDispose,
+    OnError? onError,
+    bool? cancelOnError,
+    VoidCallback? onListen,
+    VoidCallback? onPause,
+    VoidCallback? onResume,
+    VoidCallback? onCancel,
+    HandleSubscription<void>? handleSubscription,
   }) {
     return _VoidReactiveStreamSink._(
       (void _) {
@@ -418,16 +417,16 @@ class _VoidReactiveStreamSink extends _ReactiveStreamSink<void>
 
   _VoidReactiveStreamSink._(
     OnData onData, {
-    Transform<void> /*nullable*/ transform,
-    @required ResourceDisposer /*nullable*/ disposer,
-    VoidCallback /*nullable*/ onDispose,
-    OnError /*nullable*/ onError,
-    bool /*nullable*/ cancelOnError,
-    VoidCallback /*nullable*/ onListen,
-    VoidCallback /*nullable*/ onPause,
-    VoidCallback /*nullable*/ onResume,
-    VoidCallback /*nullable*/ onCancel,
-    HandleSubscription<void> /*nullable*/ handleSubscription,
+    Transform<void>? transform,
+    required ResourceDisposer? disposer,
+    VoidCallback? onDispose,
+    OnError? onError,
+    bool? cancelOnError,
+    VoidCallback? onListen,
+    VoidCallback? onPause,
+    VoidCallback? onResume,
+    VoidCallback? onCancel,
+    HandleSubscription<void>? handleSubscription,
   }) : super(
           onData,
           transform: transform,

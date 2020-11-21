@@ -60,11 +60,12 @@ void main() {
       group('OnCancel', () {}, skip: true);
       test('Invoking close with listening, onCancel is called.', () async {
         var onCancelIsCalled = false;
-        final sink = ReactiveSink<int>((event) {}, onCancel: () {
+        final sink = ReactiveSink<int>((_) {}, onCancel: () {
           onCancelIsCalled = true;
         }, disposer: null);
         sink(0);
-        await sink.close();
+        sink.close();
+        await pumpEventQueue();
         expect(onCancelIsCalled, isTrue);
       });
     });
@@ -72,7 +73,7 @@ void main() {
     test(
         'Pause and resume by event StreamSubscription, '
         'which can be handled via HandleSubscription callback.', () async {
-      StreamSubscription<int> eventSubscription;
+      late StreamSubscription<int> eventSubscription;
       var i = 0;
       final sink = ReactiveSink<int>((event) {
         i = i + event;
@@ -100,9 +101,9 @@ void main() {
 
     test('Cancel subscription.', () async {
       var onDoneIsCalled = false;
-      StreamSubscription<int> eventSubscription;
+      late StreamSubscription<int> eventSubscription;
 
-      final sink = ReactiveSink<int>((event) {}, handleSubscription: (s) {
+      final sink = ReactiveSink<int>((_) {}, handleSubscription: (s) {
         eventSubscription = s;
       }, disposer: null);
 
@@ -123,8 +124,8 @@ void main() {
 
   group('Dispose.', () {
     group('Delegating disposing.', () {
-      ReactiveSink<int> sink;
-      ResourceDisposer disposer;
+      late ReactiveSink<int> sink;
+      late ResourceDisposer disposer;
       var isEventHandled = false;
 
       setUp(() {
@@ -151,7 +152,7 @@ void main() {
       });
 
       test('Dispose by dispose() on pause', () async {
-        StreamSubscription<int> subscription;
+        late StreamSubscription<int> subscription;
         sink = ReactiveSink<int>((event) {}, disposer: disposer,
             handleSubscription: (s) {
           subscription = s;
@@ -174,7 +175,7 @@ void main() {
     });
 
     group('Not delegating disposing', () {
-      ReactiveSink<int> sink;
+      late ReactiveSink<int> sink;
 
       setUp(() {
         sink = ReactiveSink<int>((event) {}, disposer: null);
@@ -187,7 +188,7 @@ void main() {
       });
 
       test('Dispose by dispose() on pause', () async {
-        StreamSubscription<int> subscription;
+        late StreamSubscription<int> subscription;
         sink = ReactiveSink<int>((event) {}, disposer: null,
             handleSubscription: (s) {
           subscription = s;
@@ -201,7 +202,7 @@ void main() {
 
     test('OnDispose callback.', () async {
       var onDisposeCalled = false;
-      final sink = ReactiveSink<int>((event) {}, onDispose: () {
+      final sink = ReactiveSink<int>((_) {}, onDispose: () {
         onDisposeCalled = true;
       }, disposer: null);
       sink.dispose();
@@ -250,7 +251,7 @@ void main() {
         var onErrorReached = false;
         final sink = ReactiveEventSink((_) {
           onDataReached = true;
-        }, onError: (error, stackTrace) {
+        }, onError: (_, __) {
           onErrorReached = true;
         }, disposer: null);
         sink.dispose();
@@ -286,7 +287,7 @@ void main() {
         var onErrorReached = false;
         final sink = VoidReactiveEventSink(() {
           onDataReached = true;
-        }, onError: (error, stackTrace) {
+        }, onError: (_, __) {
           onErrorReached = true;
         }, disposer: null);
         sink.addError(Exception('exception.'));
@@ -300,7 +301,7 @@ void main() {
         var onErrorReached = false;
         final sink = VoidReactiveEventSink(() {
           onDataReached = true;
-        }, onError: (error, stackTrace) {
+        }, onError: (_, __) {
           onErrorReached = true;
         }, disposer: null);
         sink.dispose();
@@ -312,8 +313,8 @@ void main() {
       });
 
       test('Listening lazily.', () {
-        final sink = VoidReactiveEventSink(() {},
-            onError: (error, stackTrace) {}, disposer: null);
+        final sink =
+            VoidReactiveEventSink(() {}, onError: (_, __) {}, disposer: null);
         expect(sink.eventStreamSubscription, isNull);
         sink.addError(Error());
         expect(sink.eventStreamSubscription, isNotNull);
@@ -363,8 +364,8 @@ void main() {
 
     group('Dispose.', () {
       group('Delegating disposing.', () {
-        ReactiveStreamSink<int> sink;
-        ResourceDisposer disposer;
+        late ReactiveStreamSink<int> sink;
+        late ResourceDisposer disposer;
         var isEventHandled = false;
 
         setUp(() {
@@ -391,7 +392,7 @@ void main() {
         });
 
         test('Dispose by dispose() on pause', () async {
-          StreamSubscription<int> subscription;
+          late StreamSubscription<int> subscription;
           sink = ReactiveStreamSink<int>((event) {}, disposer: disposer,
               handleSubscription: (s) {
             subscription = s;
@@ -415,7 +416,7 @@ void main() {
       });
 
       group('Not delegating disposing', () {
-        ReactiveStreamSink<int> sink;
+        late ReactiveStreamSink<int> sink;
 
         setUp(() {
           sink = ReactiveStreamSink<int>((event) {}, disposer: null);
@@ -428,7 +429,7 @@ void main() {
         });
 
         test('Dispose by dispose() on pause', () async {
-          StreamSubscription<int> subscription;
+          late StreamSubscription<int> subscription;
           sink = ReactiveStreamSink<int>((event) {}, disposer: null,
               handleSubscription: (s) {
             subscription = s;

@@ -23,7 +23,7 @@ mixin ReactiveResource implements _ReactiveResource {
   @override
   Stream<void> get disposed => disposer.disposed;
 
-  ResourceDisposer _disposer;
+  ResourceDisposer? _disposer;
 
   /// A subject of disposing the resources.
   ///

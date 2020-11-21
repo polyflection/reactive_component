@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Reactive', () {
-    Reactive<int> aReactiveInt;
+    late Reactive<int> aReactiveInt;
 
     setUp(() {
       aReactiveInt = Reactive<int>(0, disposer: null);
@@ -161,8 +161,8 @@ void main() {
 
     group('Dispose.', () {
       group('Delegating disposing.', () {
-        Reactive<int> aReactiveInt;
-        ResourceDisposer disposer;
+        late Reactive<int> aReactiveInt;
+        late ResourceDisposer disposer;
 
         setUp(() {
           disposer = ResourceDisposer(doDispose: null, onDispose: null);
@@ -191,7 +191,7 @@ void main() {
       });
 
       group('Not delegating disposing', () {
-        Reactive<int> aReactiveInt;
+        late Reactive<int> aReactiveInt;
 
         setUp(() {
           aReactiveInt = Reactive<int>(0, disposer: null);
