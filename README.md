@@ -20,43 +20,19 @@ class Counter with ReactiveComponent {
 
   /// A special kind of [StreamSink] with its own single stream listener
   /// that handles the event data.
-  VoidReactiveSink _increment;
-  VoidReactiveSink get increment => _increment ??= VoidReactiveSink(() {
-        // Increments _count on a increment event is delivered.
-        _count.data++;
-      }, disposer: disposer);
+  late final VoidReactiveSink increment = VoidReactiveSink(() {
+    _count.data++;
+  }, disposer: disposer);
 
   /// A [Reactive] int data as count state of this counter.
   ///
   /// [Reactive] is a special kind of [StreamController] that holds its latest
   /// stream data, and sends that as the first data to any new listener.
-  Reactive<int> __count;
-  Reactive<int> get _count =>
-      __count ??= Reactive<int>(_initialCount, disposer: disposer);
+  late final _count = Reactive<int>(_initialCount, disposer: disposer);
 
   /// Publicize only the stream of [_count] to hide its data mutating
   /// and the other behaviors.
   /// It's a good point to transform the stream as necessary.
-  Stream<int> get count => _count.stream;
-}
-```
-
-In current Dart spec, a lazy initialization technique with "??=" let them access the other instance members at its callback functions.
-
-When "null-safety" is available in a future Dart, thankfully the notation will be conciser as below,
-
-```dart
-class Counter with ReactiveComponent {
-  Counter(this._initialCount);
-
-  final int _initialCount;
-
-  late final VoidReactiveSink increment = VoidReactiveSink(() {
-    _count.data++;
-  }, disposer: disposer);
-
-  late final _count = Reactive<int>(_initialCount, disposer: disposer);
-
   Stream<int> get count => _count.stream;
 }
 ```

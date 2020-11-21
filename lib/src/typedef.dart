@@ -1,2 +1,2 @@
-/// TODO: document it.
+/// VoidCallback Type.
 typedef VoidCallback = void Function();

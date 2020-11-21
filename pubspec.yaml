@@ -1,6 +1,6 @@
 name: reactive_component
 description: A package that supports for creating stream-based reactive components.
-version: 0.2.0
+version: 0.3.0-nullsafety.0
 homepage: https://github.com/polyflection/reactive_component
 
 environment:

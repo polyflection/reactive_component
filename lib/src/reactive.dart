@@ -51,21 +51,6 @@ import 'typedef.dart';
 ///
 /// ```dart
 /// class C with ReactiveComponent {
-///   Reactive<int> __aReactiveInt;
-///   Reactive<int> get _aReactiveInt =
-///       Reactive<int>(0, disposer: disposer);
-///
-///   Stream<int> get anIntStream => _aReactiveInt.stream;
-/// }
-/// ```
-/// In current Dart spec, a lazy initialization technique with "??=" let them
-/// access the other instance members at its callback functions.
-///
-/// When "null-safety" is available in a future Dart, thankfully
-/// the notation will be conciser as below,
-///
-/// ```dart
-/// class C with ReactiveComponent {
 ///   late final Reactive<int> _aReactiveInt =
 ///       Reactive<int>(0, disposer: disposer);
 ///
@@ -272,7 +257,7 @@ class Reactive<D> with ReactiveResource implements StreamController<D> {
   }
 }
 
-/// TODO: document it.
+/// FutureOrVoidCallback Type.
 typedef FutureOrVoidCallback = FutureOr<void> Function();
 
 /// A class that publicizes only the [StreamSink] interface of

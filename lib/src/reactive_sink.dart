@@ -6,16 +6,16 @@ import 'resource_disposer.dart';
 import 'sinks.dart';
 import 'typedef.dart';
 
-/// TODO: document it.
+/// OnData Type.
 typedef OnData<T> = void Function(T data);
 
-/// TODO: document it.
+/// Transform Type.
 typedef Transform<T> = Stream<T> Function(Stream<T> stream);
 
-/// TODO: document it.
+/// OnError Type.
 typedef OnError = void Function(Object error, StackTrace stackTrace);
 
-/// TODO: document it.
+/// HandleSubscription Type.
 typedef HandleSubscription<T> = void Function(
     StreamSubscription<T> subscription);
 
@@ -36,7 +36,7 @@ typedef HandleSubscription<T> = void Function(
 ///
 /// sink(1); // Shorthand notation of "sink.add(1);".
 ///
-/// Future.microtask(() {
+/// Future(() {
 ///   print(i); // prints 2.
 /// });
 /// ```

@@ -22,14 +22,11 @@ import 'sinks.dart';
 ///   Counter(this._initialCount);
 ///   final int _initialCount;
 ///
-///   VoidReactiveSink _increment;
-///   VoidReactiveSink get increment => _increment ??= VoidReactiveSink((_) {
-///         _count.data++;
-///       }, disposer: disposer);
+///   late final VoidReactiveSink increment = VoidReactiveSink(() {
+///     _count.data++;
+///   }, disposer: disposer);
 ///
-///   Reactive<int> __count;
-///   Reactive<int> get _count => __count ??= Reactive<int>(_initialCount,
-///       disposer: disposer);
+///   late final _count = Reactive<int>(_initialCount, disposer: disposer);
 ///   Stream<int> get count => _count.stream;
 /// }
 ///
@@ -52,26 +49,6 @@ import 'sinks.dart';
 /// // The all resources of the component (`_increment` and `__count`)
 /// // will be disposed of together.
 /// counter.dispose();
-/// ```
-///
-/// It utilizes lazy initialization technique ( "??=" ) so that the two
-/// instance members can access the other members on their callback functions.
-///
-/// With `late` notation in null-safety feature, `Counter` will be conciser
-/// as below,
-///
-/// ```
-/// class Counter with ReactiveComponent {
-///   Counter(this._initialCount);
-///   final int _initialCount;
-///
-///   late final VoidReactiveSink increment = VoidReactiveSink((_) {
-///         _count.data++;
-///       }, disposer: disposer);
-///
-///   late final _count = Reactive<int>(_initialCount, disposer: disposer);
-///   Stream<int> get count => _count.stream;
-/// }
 /// ```
 ///
 /// More examples are listed on this package's example/ directory, including
