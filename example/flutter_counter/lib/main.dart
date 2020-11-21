@@ -25,44 +25,20 @@ class _Counter with ReactiveComponent {
   /// "dispose()" action of [ReactiveSink] can be delegated to
   /// [ReactiveComponent]'s disposer.
   ///
-  /// In current Dart spec, a lazy initialization technique with "??="
-  /// let them access the other instance members at its callback functions.
-  ///
-  /// When "null-safety" is available in a future Dart, thankfully the notation
-  /// will be conciser as below,
-  ///
-  /// '''dart
-  /// late final increment = VoidReactiveSink(() {
-  ///        _count.data++;
-  ///      }, disposer: disposer);
-  /// '''
-  ///
   /// For more information, see [ReactiveSink]'s API documentation.
-  VoidReactiveSink _increment;
-  VoidReactiveSink get increment => _increment ??= VoidReactiveSink(() {
-        // Increments _count on a increment event is delivered.
-        _count.data++;
-      }, disposer: disposer);
+  late final VoidReactiveSink increment = VoidReactiveSink(() {
+    // Increments _count on a increment event is delivered.
+    _count.data++;
+  }, disposer: disposer);
 
   /// A [Reactive], [int] data as count state of this counter.
   ///
   /// [Reactive] is a special kind of [StreamController] that holds its latest
   /// stream data, and sends that as the first data to any new listener.
   ///
-  /// In current Dart spec, a lazy initialization technique with "??="
-  /// let them access the other instance members at its callback functions.
-  ///
-  /// When "null-safety" is available in a future Dart, thankfully the notation
-  /// will be conciser as below,
-  ///
-  /// '''dart
-  /// late final _count = Reactive<int>(_initialCount, disposer: disposer);
-  /// '''
-  ///
   /// For more information, see [Reactive]'s API documentation.
-  Reactive<int> __count;
-  Reactive<int> get _count =>
-      __count ??= Reactive<int>(_initialCount, disposer: disposer);
+  late final Reactive<int> _count =
+      Reactive<int>(_initialCount, disposer: disposer);
 
   /// Publicize only the stream of [_count] to hide its data mutating
   /// and the other behaviors.
@@ -92,7 +68,7 @@ class MyApp extends StatelessWidget {
 /// MyHomePage
 class MyHomePage extends StatefulWidget {
   /// Constructor
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   /// Title
   final String title;
@@ -102,7 +78,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _Counter _counter;
+  late final _Counter _counter;
 
   @override
   void initState() {
